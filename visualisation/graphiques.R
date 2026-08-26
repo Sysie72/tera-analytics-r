@@ -59,11 +59,10 @@ graphique_profil_horaire <- function(df, seuil_oms = SEUIL_OMS) {
     ggplot2::geom_point(color = "#1f77b4", size = 3) +
     ggplot2::geom_ribbon(ggplot2::aes(ymin = mean - sd, ymax = mean + sd), 
                          alpha = 0.2, fill = "#1f77b4") +
-    ggplot2::geom_hline(yintercept = seuil_oms, color = "red", linetype = "dashed", 
-                        linewidth = 1, label = sprintf("OMS (%.0f)", seuil_oms)) +
+    ggplot2::geom_hline(yintercept = seuil_oms, color = "red", linetype = "dashed", linewidth = 1) +
     ggplot2::annotate("text", x = peak_hour, y = peak_value + 2, 
                       label = sprintf("Pic: %.1f µg/m³", peak_value),
-                      color = "#1f77b4", fontsize = 3) +
+                      color = "#1f77b4", size = 3) +
     ggplot2::labs(
       title = "1. Cycle Diurne — PM2.5 par Heure",
       x = "Heure de la journée",
@@ -101,13 +100,12 @@ graphique_profil_mensuel <- function(df, seuil_oms = SEUIL_OMS) {
     ggplot2::geom_col() +
     ggplot2::geom_errorbar(ggplot2::aes(ymin = mean - sd, ymax = mean + sd), 
                            width = 0.3, color = "black", linewidth = 0.8) +
-    ggplot2::geom_hline(yintercept = seuil_oms, color = "red", linetype = "dashed", 
-                        linewidth = 1) +
+    ggplot2::geom_hline(yintercept = seuil_oms, color = "red", linetype = "dashed", linewidth = 1) +
     ggplot2::scale_x_continuous(breaks = 1:12, labels = mois_labels) +
     ggplot2::scale_fill_gradient(low = "#90EE90", high = "#FF6B6B") +
     ggplot2::annotate("text", x = peak_month, y = peak_value + 1.5, 
                       label = sprintf("Max: %s", mois_labels[peak_month]),
-                      color = "black", fontsize = 3) +
+                      color = "black", size = 3) +
     ggplot2::labs(
       title = "2. Variation Saisonnière — PM2.5 par Mois",
       x = "Mois",
@@ -131,8 +129,7 @@ graphique_serie_temporelle <- function(moyenne_journaliere, seuil_oms = SEUIL_OM
     ggplot2::geom_point(data = moyenne_journaliere %>% 
                         dplyr::filter(pm25_mean > seuil_oms),
                         color = "red", size = 1, alpha = 0.5) +
-    ggplot2::geom_hline(yintercept = seuil_oms, color = "red", linetype = "dashed", 
-                        linewidth = 1) +
+    ggplot2::geom_hline(yintercept = seuil_oms, color = "red", linetype = "dashed", linewidth = 1) +
     ggplot2::labs(
       title = "3. Évolution Temporelle — Moyenne Journalière",
       x = "Date",
@@ -158,8 +155,7 @@ graphique_top_capteurs <- function(stats, top = 10, seuil_oms = SEUIL_OMS) {
   
   ggplot2::ggplot(top_stats, ggplot2::aes(x = reorder(label, mean), y = mean, fill = mean)) +
     ggplot2::geom_col() +
-    ggplot2::geom_hline(yintercept = seuil_oms, color = "red", linetype = "dashed", 
-                        linewidth = 1) +
+    ggplot2::geom_hline(yintercept = seuil_oms, color = "red", linetype = "dashed", linewidth = 1) +
     ggplot2::scale_fill_gradient(low = "#90EE90", high = "#FF6B6B") +
     ggplot2::coord_flip() +
     ggplot2::labs(
@@ -185,12 +181,13 @@ graphique_distribution <- function(df) {
   
   ggplot2::ggplot(df, ggplot2::aes(x = pm25)) +
     ggplot2::geom_histogram(bins = 50, fill = "#9467bd", alpha = 0.7, color = "black") +
-    ggplot2::geom_vline(xintercept = moyenne, color = "black", linetype = "dashed", 
-                        linewidth = 1, label = sprintf("Moyenne: %.1f", moyenne)) +
-    ggplot2::geom_vline(xintercept = p95, color = "darkorange", linetype = ":", 
-                        linewidth = 1, label = sprintf("P95: %.1f", p95)) +
-    ggplot2::geom_vline(xintercept = p90, color = "orange", linetype = ":", 
-                        linewidth = 1, label = sprintf("P90: %.1f", p90)) +
+    ggplot2::geom_vline(xintercept = moyenne, color = "black", linetype = "dashed", linewidth = 1) +
+    ggplot2::geom_vline(xintercept = p95, color = "darkorange", linetype = ":", linewidth = 1) +
+    ggplot2::geom_vline(xintercept = p90, color = "orange", linetype = ":", linewidth = 1) +
+    ggplot2::annotate("text", x = moyenne, y = Inf, label = sprintf("Moy: %.1f", moyenne),
+                      hjust = 0.5, vjust = 1.5, size = 3, color = "black") +
+    ggplot2::annotate("text", x = p95, y = Inf, label = sprintf("P95: %.1f", p95),
+                      hjust = 0.5, vjust = 3, size = 3, color = "darkorange") +
     ggplot2::labs(
       title = "5. Distribution des Concentrations PM2.5",
       x = "PM2.5 (µg/m³)",
@@ -259,10 +256,8 @@ graphique_pm1_vs_pm25 <- function(df) {
   
   ggplot2::ggplot(sample, ggplot2::aes(x = pm1, y = pm25)) +
     ggplot2::geom_point(alpha = 0.1, size = 1, color = "#17becf") +
-    ggplot2::geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed", 
-                         linewidth = 1, label = "Diagonale") +
-    ggplot2::geom_smooth(method = "lm", se = TRUE, color = "blue", fill = "lightblue", 
-                         alpha = 0.2, linewidth = 1) +
+    ggplot2::geom_abline(slope = 1, intercept = 0, color = "red", linetype = "dashed", linewidth = 1) +
+    ggplot2::geom_smooth(method = "lm", se = TRUE, color = "blue", fill = "lightblue", alpha = 0.2, linewidth = 1) +
     ggplot2::labs(
       title = "8. Relation PM1 vs PM2.5",
       x = "PM1 (µg/m³)",
@@ -292,8 +287,7 @@ graphique_taux_depassement <- function(df, seuil_oms = SEUIL_OMS) {
   
   ggplot2::ggplot(monthly_exceedance, ggplot2::aes(x = factor(month), y = pct_depassement, fill = pct_depassement)) +
     ggplot2::geom_col() +
-    ggplot2::geom_text(ggplot2::aes(label = sprintf("%.1f%%", pct_depassement)), 
-                       vjust = -0.5, fontsize = 3) +
+    ggplot2::geom_text(ggplot2::aes(label = sprintf("%.1f%%", pct_depassement)), vjust = -0.5, size = 3) +
     ggplot2::scale_x_discrete(labels = mois_labels) +
     ggplot2::scale_fill_gradient(low = "#90EE90", high = "#FF6B6B") +
     ggplot2::labs(
