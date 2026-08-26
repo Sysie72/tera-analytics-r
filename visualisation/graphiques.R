@@ -1,6 +1,3 @@
-# ========================================
-# VISUALISATION : Graphiques individuels (1 PNG chacun)
-# ========================================
 
 #' Configuration du style ggplot2
 #'
@@ -273,8 +270,7 @@ graphique_heatmap_horaire_mensuel <- function(df) {
     ggplot2::theme(axis.text.x = ggplot2::element_text(size = 8))
 }
 
-#' Graphique 11 : Corrélation entre capteurs (Heatmap)
-#'
+
 #' @param df DataFrame avec colonnes id_sensor, date, pm25
 #'
 #' @return ggplot object
