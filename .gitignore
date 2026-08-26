@@ -1,0 +1,23 @@
+# Données brutes
+data/*.csv
+!data/.gitkeep
+
+# Résultats traités
+data/processed/
+outputs/figures/
+
+# RStudio
+.Rproj.user/
+*.Rproj
+.Rhistory
+.RData
+
+# VS Code
+.vscode/
+*.code-workspace
+
+# MacOS
+.DS_Store
+
+# Système
+Thumbs.db
